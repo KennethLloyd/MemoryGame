@@ -1,0 +1,29 @@
+# Project: ed
+# Makefile created by Dev-C++ 4.9.8.5
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = main.o $(RES)
+LINKOBJ  = main.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" ../sample1/dexsdk.a syslib.o -e _dexsdk_crt 
+INCS =  -I"C:/Dev-Cpp/include" 
+CXXINCS =  -I"C:/Dev-Cpp/include/c++"  -I"C:/Dev-Cpp/include/c++/mingw32"  -I"C:/Dev-Cpp/include/c++/backward"  -I"C:/Dev-Cpp/include" 
+BIN  = ed.exe
+CXXFLAGS = $(CXXINCS)  -O1 -nostdlib
+CFLAGS = $(INCS)  -O1 -nostdlib
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before ed.exe all-after
+
+
+clean: clean-custom
+	rm -f $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CC) $(LINKOBJ) -o "ed.exe" $(LIBS)
+
+main.o: main.c
+	$(CC) -c main.c -o main.o $(CFLAGS)

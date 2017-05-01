@@ -1,0 +1,29 @@
+=======================================================
+DexEdit - The simple text editor for dex-os
+Author: Joseph Emmanuel DL Dayo
+e-mail: j_dayo@yahoo.com
+Version: 1.1
+kernel version: dex-os 1.0 release 1 
+Date: April 2, 2004
+License: GNU General Public License version 2
+=======================================================
+
+Included in this package is the source code and
+binaries of a sample text-editor application. To compile
+this package, you need Bloodshed dev-cpp/mingw (compilation
+with another 32-bit compiler is theoretically possible) and
+the files syslib.o and dexsdk.a from the DEX SDK. A 
+dev-cpp project file "ed.dev" is provided for your
+convenience, although you must still edit the
+project | properties | linker options to make sure
+that it points to the correct location of the
+SDK files.
+
+
+To run this application, simply type the full name
+of this application at the DEX command prompt. To obtain
+help, pass -help as a paramaeter.
+
+=============================================================
+For any bug or problem concerning this application,
+contact the author.

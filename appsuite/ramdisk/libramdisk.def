@@ -1,0 +1,3 @@
+; dlltool --base-file C:\DOCUME~1\JOSEPH~1\LOCALS~1\Temp/cca01536.base --output-exp ramdisk.exp --dllname ramdisk.dll --output-def libramdisk.def --no-export-all-symbols --add-stdcall-alias --exclude-symbol=DllMainCRTStartup@12 --def C:\DOCUME~1\JOSEPH~1\LOCALS~1\Temp/cca01536.def --output-lib libramdisk.a
+EXPORTS
+	dex32_libmain @ 1 ; 
