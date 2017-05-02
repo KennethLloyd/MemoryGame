@@ -2,6 +2,8 @@
 
 void erase(int x, int y, int w, int h); //basically covers an area with a black rectangle
 void print_board(int x, int y); //set up initial board
+void print_card(int r, int c, int x, int y);
+void gray(int x, int y);
 void setup_level(); 
 
 #define FLIP 'l'
@@ -27,7 +29,7 @@ void setup_level();
 #define Y 35
 
 int level, flips;
-char board[3][3];
+char board[5][5]; 
 
 int main() {
 	char keypress = START_GAME;
@@ -73,6 +75,36 @@ void erase(int x, int y, int w, int h){ //basically covers an area with a black 
          write_pixel(j,i,100);
 }
 
+void print_card(int r, int c, int x, int y){ //print a card
+
+	gray(x, y);
+	//light(r, c, x, y);
+	
+}
+
+void gray(int x, int y){ //prints a gray card socket 
+int i;
+	for (i=0;i<30;i++)write_pixel(i+x,0+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,1+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,2+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,3+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,4+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,5+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,6+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,7+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,8+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,9+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,10+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,11+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,12+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,13+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,14+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,15+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,16+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,17+y,56);
+	for (i=0;i<30;i++)write_pixel(i+x,18+y,56);
+}
+
 void setup_level(){ 
 
 }
@@ -89,12 +121,12 @@ void print_board(int x, int y){ //set up initial board
 	sprintf(str,"%d",level);
    	write_text(str,190,5,WHITE,0);
 
-	/*//print the 25 bulbs
-	for(i=0; i<maxrow; i++, b+=24){
-		for(j=0; j<maxcol; j++, a+=31)
-			print_bulb(i, j, a, b);
+	//print the 25 cards
+	for(i=0; i<5; i++, b+=24){
+		for(j=0; j<5; j++, a+=31)
+			print_card(i, j, a, b);
 		a=x;
-	}*/
+	}
 	
 	//display legend
 	write_text("Up-W",5,35,WHITE,0);
