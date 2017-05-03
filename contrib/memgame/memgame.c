@@ -29,7 +29,7 @@ void setup_level();
 #define Y 35
 
 int level, flips;
-char board[5][5]; 
+char board[6][6]; 
 
 int main() {
 	char keypress = START_GAME;
@@ -122,8 +122,8 @@ void print_board(int x, int y){ //set up initial board
    	write_text(str,190,5,WHITE,0);
 
 	//print the 25 cards
-	for(i=0; i<5; i++, b+=24){
-		for(j=0; j<5; j++, a+=31)
+	for(i=0; i<6; i++, b+=24){
+		for(j=0; j<6; j++, a+=31)
 			print_card(i, j, a, b);
 		a=x;
 	}
@@ -131,21 +131,23 @@ void print_board(int x, int y){ //set up initial board
 	//display legend
 	write_text("Up-W",5,35,WHITE,0);
 	write_text("Dn-S",5,45,WHITE,0);
-	write_text("Lf-A",5,55,WHITE,0);
+	write_text("Lt-A",5,55,WHITE,0);
 	write_text("Rt-D",5,65,WHITE,0);
 	
 	write_text("Flip-L",5,75,WHITE,0);
 	write_text("Exit-X",5,85,WHITE,0);
-	write_text("Reset-R",5,95,WHITE,0);
+	write_text("Rstrt-R",5,95,WHITE,0);
 
 	//show number of flips
-	write_text("Flips:",5,115,WHITE,0);
+	write_text("Turns:",5,115,WHITE,0);
 }
 
 //displays header
 header(){
 	
-	write_text("MEMORY GAME!",100,40,WHITE,1); //title
+	write_text("MEMORY MAGIC!",100,40,WHITE,1); //title
+
+	write_text("-a memory game-",90,80,WHITE,0); //title
 
 	//menu options
 	write_text("1 - Start",40,160,WHITE,0); 
