@@ -7,6 +7,8 @@ void updateBoard(); //after moving
 void setupLevel(); 
 void setCoordinates(int x, int y); //position of individual cards
 void cardDesign(int a, int b, int x, int y, int color);// For printing card visual
+void shuffle(int min, int max);
+int randomize(int min, int max);
 
 #define SHOW 1
 #define HIDE 2
@@ -38,7 +40,8 @@ void cardDesign(int a, int b, int x, int y, int color);// For printing card visu
 #define MAXCOL 6
 
 int level, flips, turns;
-char board[MAXROW][MAXCOL]; 
+char board[MAXROW][MAXCOL];
+int bucket[83]; 
 int cards_x[MAXROW][MAXCOL];
 int cards_y[MAXROW][MAXCOL];
 int row, col, oldrow = 0, oldcol = 0;
@@ -132,7 +135,6 @@ int main() {
 
 						//STARTS HERE
 						else if (keypress == FLIP) {
-							
 							flips++;
 							facedown_cards--;
 							if(board[row][col] == SELECT){	//Card value is hidden
@@ -277,7 +279,6 @@ void printCard(int r, int c, int x, int y){ //print a card
 		write_text(symbol,x+12,y+7,GRAY,0);
 
 	}
-	//else	
 }
 
 
@@ -290,52 +291,16 @@ void setupLevel() { //setup cards all face down
 		}
 	}
 
+	for (i=0;i<83;i++) { //initialize symbol counter
+		bucket[i] = 0;
+	}
+
 	board[0][0] = SELECT; //first card as the current (selected) for the cursor
 
 	//Hard Coded pairs for now
 
-	//Add SHUFFLING HERE OR FUCNTION sSHUFFLE()
-	symbols[0][0] = 65;	//A
-	symbols[0][1] = 66;
-	symbols[0][2] = 67;
-	symbols[0][3] = 65;
-	symbols[0][4] = 66;
-	symbols[0][5] = 67;
-
-	symbols[1][0] = 68;
-	symbols[1][1] = 68;
-	symbols[1][2] = 69;
-	symbols[1][3] = 69;
-	symbols[1][4] = 70;
-	symbols[1][5] = 70;
-
-	symbols[2][0] = 71;
-	symbols[2][1] = 71;
-	symbols[2][2] = 72;
-	symbols[2][3] = 72;
-	symbols[2][4] = 73;
-	symbols[2][5] = 73;
-
-	symbols[3][0] = 74;
-	symbols[3][1] = 74;
-	symbols[3][2] = 75;
-	symbols[3][3] = 75;
-	symbols[3][4] = 76;
-	symbols[3][5] = 76;
-
-	symbols[4][0] = 77;
-	symbols[4][1] = 77;
-	symbols[4][2] = 78;
-	symbols[4][3] = 78;
-	symbols[4][4] = 79;
-	symbols[4][5] = 79;
-
-	symbols[5][0] = 80;
-	symbols[5][1] = 80;
-	symbols[5][2] = 81;
-	symbols[5][3] = 81;
-	symbols[5][4] = 82;
-	symbols[5][5] = 82;
+	int max = 82, min = 65;
+	shuffle(min, max);
 
 	facedown_cards = 0;
 
@@ -345,6 +310,33 @@ void setupLevel() { //setup cards all face down
 				facedown_cards++;
 			}
 		}
+	}
+}
+
+void shuffle(int min, int max) { //shuffle cards
+	int i, j;
+	for (i=0;i<MAXROW;i++) {
+		for (j=0;j<MAXCOL;j++) {
+			int num;
+			while (1) {
+				num = randomize(min, max); //generate random numbers from 65(A) to 82(R)
+				if (num != 1) { //try again
+					break;
+				}
+			}
+			bucket[num]++; //increment occurence of a character
+			symbols[i][j] = num;	
+		}
+	}
+}
+
+int randomize(int min, int max) {
+	int num = (rand() % (max + 1 - min)) + min;
+	if (bucket[num] >= 2) { //only allow two pairs for one character
+		return 1; //error shuffling
+	}
+	else {
+		return num;
 	}
 }
 
