@@ -44,7 +44,7 @@ int cards_y[MAXROW][MAXCOL];
 int row, col, oldrow = 0, oldcol = 0;
 int symbols[MAXROW][MAXCOL];
 int f1_row = 0, f1_col = 0, f2_row = 0, f2_col = 0;
-int matching_pairs;
+int facedown_cards;
 
 int main() {
 	char str[15];
@@ -88,6 +88,8 @@ int main() {
 							if(symbols[f1_row][f1_col] != symbols[f2_row][f2_col]){	//cards will hide after next move if not matching
 								board[f1_row][f1_col] = HIDE;	
 								board[f2_row][f2_col] = HIDE;
+								facedown_cards++;
+								facedown_cards++;
 							}
 							flips = 0;
 							turns++;
@@ -127,10 +129,12 @@ int main() {
 							row = (row + 1) % MAXROW;
 							hasMoved = 1;
 						}
+
 						//STARTS HERE
 						else if (keypress == FLIP) {
 							
 							flips++;
+							facedown_cards--;
 							if(board[row][col] == SELECT){	//Card value is hidden
 
 								board[row][col] = SHOW;	//Flip card to show
@@ -149,6 +153,21 @@ int main() {
 							hasMoved = 1; //to update the card
 						}
 						//ENDS HERE
+
+						if(facedown_cards <= 0){
+							
+							level++;
+							//finished a puzzle
+							cardDesign(60,150,90,60,BLACK);
+							write_text("You matched",120,70,PALE_YELLOW,0);
+							write_text("all pairs!",120,80,PALE_YELLOW,0);
+							write_text("Congratulations!",95,90,PALE_YELLOW,0);
+							write_text("Press any key",110, 100,PALE_YELLOW,0);
+							keypress=(char)getch();
+							erase(50,50,200,150); //erase congratulations
+							keypress = START_GAME;
+							break;
+						}
 
 						if(hasMoved == 1) { //up, down, left or right
 							if (board[row][col] == HIDE) {
@@ -171,13 +190,13 @@ int main() {
 				}while(keypress != QUIT && keypress != RESTART);
 				if(keypress == QUIT){
 					//prompt confirmation then erase message
-					write_text("Do you want to exit? y/n ",60,160,WHITE,0); 
+					write_text("Do you want to exit? y/n ",60,160,PALE_YELLOW,0); 
 					keypress = (char)getch();
 					erase(60,160,220,40);			
 				}
 				else if(keypress == RESTART){
 					//prompt confirmation then erase message
-					write_text("Do you want to restart? y/n ",50,160,WHITE,0);
+					write_text("Do you want to restart? y/n ",50,160,PALE_YELLOW,0);
 					keypress = (char)getch();
 					if(keypress == YES) keypress = START_GAME;
 					erase(50,160,260,40);			
@@ -274,6 +293,8 @@ void setupLevel() { //setup cards all face down
 	board[0][0] = SELECT; //first card as the current (selected) for the cursor
 
 	//Hard Coded pairs for now
+
+	//Add SHUFFLING HERE OR FUCNTION sSHUFFLE()
 	symbols[0][0] = 65;	//A
 	symbols[0][1] = 66;
 	symbols[0][2] = 67;
@@ -316,11 +337,12 @@ void setupLevel() { //setup cards all face down
 	symbols[5][4] = 82;
 	symbols[5][5] = 82;
 
-	matching_pairs = 0;
+	facedown_cards = 0;
+
 	for (i=0; i<MAXROW; i++) {			//Sets number of matching pairs (18)
 		for (j=0; j<MAXCOL; j++) {
 			if (board[i][j] != SHOW ) {
-				matching_pairs++;
+				facedown_cards++;
 			}
 		}
 	}
@@ -380,22 +402,61 @@ void cardDesign(int a, int b,int x, int y, int color){ //print a card
 
 header(){
 	
-	cardDesign(80,50,15,20,GRAY);
-	cardDesign(70,40,20,25,WHITE);
-	cardDesign(80,50,75,20,GRAY);
-	cardDesign(70,40,80,25,WHITE);
-	cardDesign(80,50,135,20,GRAY);
-	cardDesign(70,40,140,25,WHITE);
-	cardDesign(80,50,195,20,GRAY);
-	cardDesign(70,40,200,25,WHITE);
-	cardDesign(80,50,255,20,GRAY);
-	cardDesign(70,40,260,25,WHITE);
+	cardDesign(55,45,10,10,GRAY);
+	cardDesign(45,35,15,15,WHITE);
+
+	cardDesign(55,45,61,10,WHITE);
+	cardDesign(45,35,66,15,GRAY);
+
+	cardDesign(55,45,112,10,GRAY);
+	cardDesign(45,35,117,15,WHITE);
+
+	cardDesign(55,45,163,10,WHITE);
+	cardDesign(45,35,168,15,GRAY);
+
+	cardDesign(55,45,214,10,GRAY);
+	cardDesign(45,35,219,15,WHITE);
+
+	cardDesign(55,45,265,10,WHITE);
+	cardDesign(45,35,270,15,GRAY);
+
+
+	//
+
+
+	cardDesign(55,45,61,70,GRAY);
+	cardDesign(45,35,66,75,WHITE);
+
+	cardDesign(55,45,112,70,WHITE);
+	cardDesign(45,35,117,75,GRAY);
+
+	cardDesign(55,45,163,70,GRAY);
+	cardDesign(45,35,168,75,WHITE);
+
+	cardDesign(55,45,214,70,WHITE);
+	cardDesign(45,35,219,75,GRAY);
+	
+
+	//write_text("MEMORY MAGIC!",100,40,ROYAL_BLUE,1); //title
 
 	
 
-	write_text("MEMORY MAGIC!",100,40,ROYAL_BLUE,1); //title
+	write_text("M",30,30,ROYAL_BLUE,1); //title
+	write_text("E",81,30,WHITE,1); //title
+	write_text("M",132,30,ROYAL_BLUE,1); //title
+	write_text("O",183,30,WHITE,1); //title
+	write_text("R",234,30,ROYAL_BLUE,1); //title
+	write_text("Y",285,30,WHITE,1); //title
 
-	write_text("-a memory game-",90,80,ROYAL_BLUE,0); //title
+
+	write_text("G",81,90,ROYAL_BLUE,1); //title
+	write_text("A",132,90,WHITE,1); //title
+	write_text("M",183,90,ROYAL_BLUE,1); //title
+	write_text("E",234,90,WHITE,1); //title
+
+	//write_text("M A G I C !",110,100,ROYAL_BLUE,1); //title
+
+	//write_text("-a memory game-",100,130,ROYAL_BLUE,0); //title
 
 	//menu options
 	write_text("1 - Start",40,160,WHITE,0); 
