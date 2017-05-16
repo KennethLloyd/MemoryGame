@@ -4,7 +4,7 @@ void erase(int x, int y, int w, int h); //basically covers an area with a black 
 void printBoard(int x, int y); //set up initial board
 void printCard(int r, int c, int x, int y); //set up initial cards
 void updateBoard(); //after moving
-void setupLevel(); 
+void setupLevel();
 void setCoordinates(int x, int y); //position of individual cards
 void cardDesign(int a, int b, int x, int y, int color);// For printing card visual
 void shuffle(int min, int max);
@@ -14,7 +14,7 @@ int randomize(int min, int max);
 #define HIDE 2
 #define SELECT 3
 #define SEL_SHOW 4
- 
+
 #define FLIP 'l'
 #define UP_KEY 'w'
 #define DOWN_KEY 's'
@@ -22,7 +22,7 @@ int randomize(int min, int max);
 #define RIGHT_KEY 'd'
 #define QUIT 'x'
 #define RESTART 'r'
-#define YES 'y' 
+#define YES 'y'
 #define NO 'n'
 #define START_GAME '1'
 #define QUIT_GAME '2'
@@ -41,7 +41,7 @@ int randomize(int min, int max);
 
 int level, flips, turns;
 char board[MAXROW][MAXCOL];
-int bucket[83]; 
+int bucket[83];
 int cards_x[MAXROW][MAXCOL];
 int cards_y[MAXROW][MAXCOL];
 int row, col, oldrow = 0, oldcol = 0;
@@ -60,7 +60,6 @@ int main() {
 		header(); //print menu
 
 		level = 1;
-
 
 		keypress = (char)getch();
 		erase(1,1,400,220); //erase menu
@@ -89,7 +88,7 @@ int main() {
 						if (flips == 2) {
 							//Check if flipped pairs match
 							if(symbols[f1_row][f1_col] != symbols[f2_row][f2_col]){	//cards will hide after next move if not matching
-								board[f1_row][f1_col] = HIDE;	
+								board[f1_row][f1_col] = HIDE;
 								board[f2_row][f2_col] = HIDE;
 								facedown_cards++;
 								facedown_cards++;
@@ -100,8 +99,8 @@ int main() {
 							sprintf(str,"%d",turns);
 							write_text(str,25,125,WHITE,0);
 							printBoard(X,Y);	//Refreshes board to place non matching pairs face down
-						}				
-						
+						}
+
 						if (keypress == RIGHT_KEY) {
 							oldrow = row;
 							oldcol = col;
@@ -157,7 +156,7 @@ int main() {
 						//ENDS HERE
 
 						if(facedown_cards <= 0){
-							
+
 							level++;
 							//finished a puzzle
 							cardDesign(60,150,90,60,BLACK);
@@ -185,23 +184,23 @@ int main() {
 							}
 							if (board[oldrow][oldcol] == SEL_SHOW ) {
 								board[oldrow][oldcol] = board[oldrow][oldcol] == SEL_SHOW? SHOW: HIDE;
-							}							
+							}
 							updateBoard();
 						}
 					}
 				}while(keypress != QUIT && keypress != RESTART);
 				if(keypress == QUIT){
 					//prompt confirmation then erase message
-					write_text("Do you want to exit? y/n ",60,160,PALE_YELLOW,0); 
+					write_text("Do you want to exit? y/n ",60,160,PALE_YELLOW,0);
 					keypress = (char)getch();
-					erase(60,160,220,40);			
+					erase(60,160,220,40);
 				}
 				else if(keypress == RESTART){
 					//prompt confirmation then erase message
 					write_text("Do you want to restart? y/n ",50,160,PALE_YELLOW,0);
 					keypress = (char)getch();
 					if(keypress == YES) keypress = START_GAME;
-					erase(50,160,260,40);			
+					erase(50,160,260,40);
 				}
 			}while(keypress != YES); //will continue if the user selects no in quit or restart
 		}
@@ -214,7 +213,7 @@ int main() {
 	return 0;
 }
 
-void erase(int x, int y, int w, int h){ //basically covers an area with a black rectangle 
+void erase(int x, int y, int w, int h){ //basically covers an area with a black rectangle
    int i,j;
    for (i=y;i<=(y+h);i++)
       for (j=x;j<=(x+w);j++)
@@ -223,10 +222,10 @@ void erase(int x, int y, int w, int h){ //basically covers an area with a black 
 
 void setCoordinates(int x, int y){ //initialize card coordinates
 	int i, j, a, b;
-	
+
 	a = x; //top position
 	b = y; //bottom position
-	
+
 	//adjust the coordinates for individual positioning (different positions but same sizes)
 	for(i=0; i<MAXROW; i++, b+=24){
 		for(j=0; j<MAXCOL; j++, a+=31){
@@ -247,7 +246,7 @@ void printCard(int r, int c, int x, int y){ //print a card
 		case SHOW: color = DARK_BLUE; break;
 		case SEL_SHOW: color = WHITE; break;
 	}
-	
+
 	for (i=0;i<30;i++)write_pixel(i+x,0+y,color);
 	for (i=0;i<30;i++)write_pixel(i+x,1+y,color);
 	for (i=0;i<30;i++)write_pixel(i+x,2+y,color);
@@ -268,7 +267,7 @@ void printCard(int r, int c, int x, int y){ //print a card
 	for (i=0;i<30;i++)write_pixel(i+x,17+y,color);
 	for (i=0;i<30;i++)write_pixel(i+x,18+y,color);
 
-	if (board[r][c] == SHOW) {		
+	if (board[r][c] == SHOW) {
 		//edit for show
 		sprintf(symbol,"%c",symbols[r][c]);
 		write_text(symbol,x+12,y+7,WHITE,0);
@@ -283,34 +282,44 @@ void printCard(int r, int c, int x, int y){ //print a card
 
 
 void setupLevel() { //setup cards all face down
-	int i, j;
-   
-	for(i=0;i<MAXROW;i++) {
-		for(j=0;j<MAXCOL;j++) {
-			board[i][j] = HIDE;
-		}
-	}
+  int i, j;
+  char keypress;
 
-	for (i=0;i<83;i++) { //initialize symbol counter
+  for (i=0;i<83;i++) { //initialize symbol counter
 		bucket[i] = 0;
 	}
 
-	board[0][0] = SELECT; //first card as the current (selected) for the cursor
-
-	//Hard Coded pairs for now
-
-	int max = 82, min = 65;
+  int max = 82, min = 65;
 	shuffle(min, max);
 
-	facedown_cards = 0;
-
-	for (i=0; i<MAXROW; i++) {			//Sets number of matching pairs (18)
-		for (j=0; j<MAXCOL; j++) {
-			if (board[i][j] != SHOW ) {
-				facedown_cards++;
-			}
+  for(i=0;i<MAXROW;i++) { //show all the cards
+		for(j=0;j<MAXCOL;j++) {
+			board[i][j] = SHOW;
 		}
 	}
+
+  printBoard(X,Y);
+
+  if (keypress=(char)getch()) { //press any key to start playing
+    for(i=0;i<MAXROW;i++) {
+      for(j=0;j<MAXCOL;j++) {
+        board[i][j] = HIDE;
+      }
+    }
+
+
+  	board[0][0] = SELECT; //first card as the current (selected) for the cursor
+
+  	facedown_cards = 0;
+
+  	for (i=0; i<MAXROW; i++) {			//Sets number of matching pairs (18)
+  		for (j=0; j<MAXCOL; j++) {
+  			if (board[i][j] != SHOW ) {
+  				facedown_cards++;
+  			}
+  		}
+  	}
+  }
 }
 
 void shuffle(int min, int max) { //shuffle cards
@@ -325,7 +334,7 @@ void shuffle(int min, int max) { //shuffle cards
 				}
 			}
 			bucket[num]++; //increment occurence of a character
-			symbols[i][j] = num;	
+			symbols[i][j] = num;
 		}
 	}
 }
@@ -340,7 +349,7 @@ int randomize(int min, int max) {
 	}
 }
 
-void printBoard(int x, int y){ //set up initial board 
+void printBoard(int x, int y){ //set up initial board
 
 	int i, j, a, b;
  	a=x;
@@ -348,7 +357,7 @@ void printBoard(int x, int y){ //set up initial board
  	char str[15];
 
 	//display level
-   	write_text("Level",135,5,WHITE,0); 
+   	write_text("Level",135,5,WHITE,0);
 	sprintf(str,"%d",level);
    	write_text(str,190,5,WHITE,0);
 
@@ -356,18 +365,18 @@ void printBoard(int x, int y){ //set up initial board
 	for(i=0; i<6; i++, b+=24){
 		for(j=0; j<6; j++, a+=31)
 			//If flipped [i][j] == true -> Print symbol
-			
+
 			//else
 			printCard(i, j, a, b);
 		a=x;
 	}
-	
+
 	//display legend
 	write_text("Up-W",5,35,WHITE,0);
 	write_text("Dn-S",5,45,WHITE,0);
 	write_text("Lt-A",5,55,WHITE,0);
 	write_text("Rt-D",5,65,WHITE,0);
-	
+
 	write_text("Flip-L",5,75,WHITE,0);
 	write_text("Exit-X",5,85,WHITE,0);
 	write_text("Rstrt-R",5,95,WHITE,0);
@@ -387,13 +396,13 @@ void cardDesign(int a, int b,int x, int y, int color){ //print a card
 	int i,j;
 	for(j=0;j<a;j++){
 			for (i=0;i<b;i++){
-					write_pixel(i+x,j+y,color);					
-			}		
+					write_pixel(i+x,j+y,color);
+			}
 	}
 }
 
 header(){
-	
+
 	cardDesign(55,45,10,10,GRAY);
 	cardDesign(45,35,15,15,WHITE);
 
@@ -427,11 +436,11 @@ header(){
 
 	cardDesign(55,45,214,70,WHITE);
 	cardDesign(45,35,219,75,GRAY);
-	
+
 
 	//write_text("MEMORY MAGIC!",100,40,ROYAL_BLUE,1); //title
 
-	
+
 
 	write_text("M",30,30,ROYAL_BLUE,1); //title
 	write_text("E",81,30,WHITE,1); //title
@@ -451,6 +460,6 @@ header(){
 	//write_text("-a memory game-",100,130,ROYAL_BLUE,0); //title
 
 	//menu options
-	write_text("1 - Start",40,160,WHITE,0); 
+	write_text("1 - Start",40,160,WHITE,0);
 	write_text("2 - Quit",200,160,WHITE,0);
 }
